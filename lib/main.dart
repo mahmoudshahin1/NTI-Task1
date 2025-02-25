@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:newproject/constant/colors.dart';
 import 'package:newproject/task1/task1.dart';
+import 'package:newproject/task2/screenedittask.dart';
+import 'package:newproject/task3/task3profilescreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
             backgroundColor: ColorsApp.primaryColor,
           )),
       title: 'Flutter Demo',
-      home: const TodatyTask(),
+      home: const Task4ScreenProfile(),
     );
   }
 }

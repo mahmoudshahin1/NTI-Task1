@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:newproject/constant/appicon.dart';
+import 'package:newproject/widget/defult_text_filed.dart';
 
 class ScreenEditTask extends StatefulWidget {
   ScreenEditTask({super.key});
@@ -10,41 +11,41 @@ class ScreenEditTask extends StatefulWidget {
   State<ScreenEditTask> createState() => _ScreenEditTaskState();
 }
 
-class _ScreenEditTaskState extends State<ScreenEditTask> {
-  String? hinttext;
+String? hinttext;
 
-  TextEditingController dateTimeController = TextEditingController();
-  Future<void> _pickDateTime(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
+TextEditingController dateTimeController = TextEditingController();
+Future<void> _pickDateTime(BuildContext context) async {
+  DateTime? pickedDate = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2100),
+  );
+
+  if (pickedDate != null) {
+    TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      initialTime: TimeOfDay.now(),
     );
 
-    if (pickedDate != null) {
-      TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
+    if (pickedTime != null) {
+      DateTime finalDateTime = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        pickedTime.hour,
+        pickedTime.minute,
       );
 
-      if (pickedTime != null) {
-        DateTime finalDateTime = DateTime(
-          pickedDate.year,
-          pickedDate.month,
-          pickedDate.day,
-          pickedTime.hour,
-          pickedTime.minute,
-        );
+      String formattedDateTime =
+          "${DateFormat('d MMMM, yyyy').format(finalDateTime)} - ${DateFormat('h:mm a').format(finalDateTime)}";
 
-        String formattedDateTime =
-            "${DateFormat('d MMMM, yyyy').format(finalDateTime)} - ${DateFormat('h:mm a').format(finalDateTime)}";
-
-        dateTimeController.text = formattedDateTime;
-      }
+      dateTimeController.text = formattedDateTime;
     }
   }
+}
 
+class _ScreenEditTaskState extends State<ScreenEditTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,117 +84,30 @@ class _ScreenEditTaskState extends State<ScreenEditTask> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    onSubmitted: (value) {
-                      hinttext = value;
-                      print(value);
-                    },
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(
-                            right: 10,
-                          ),
-                          child: SvgPicture.asset(
-                            'assets/icons/Group 46.svg',
-                          ),
-                        ),
-                        label: Text('     welcom'),
-                        hintText: hinttext,
-                        hintStyle: TextStyle()),
-                  ),
-                ),
+              DefultTextFiled(
+                label: 'TaskName',
+                prefixIcon: Appicon.IconHome,
               ),
-              Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    onSubmitted: (value) {
-                      hinttext = value;
-                      print(value);
-                    },
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        label: Text(
-                          '  TaskName',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        hintText: hinttext,
-                        hintStyle: TextStyle()),
-                  ),
-                ),
+              const DefultTextFiled(
+                label: 'TaskeName',
               ),
-              Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    maxLines: null, // Allows unlimited lines
-                    keyboardType: TextInputType.multiline,
-                    onSubmitted: (value) {
-                      hinttext = value;
-                      print(value);
-                    },
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        label: Text(
-                          'Description',
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                        hintText: hinttext,
-                        hintMaxLines: 5,
-                        hintStyle: TextStyle()),
-                  ),
-                ),
+              const DefultTextFiled(
+                label: 'Description',
               ),
-              Card(
-                color: Colors.white,
-                child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: dateTimeController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        labelText: "Select Date & Time",
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(
-                            right: 10,
-                          ),
-                          child: SvgPicture.asset(
-                            Appicon.IconeCaleander,
-                          ),
-                        ),
-                      ),
-                      onTap: () => _pickDateTime(context),
-                    )),
+              DefultTextFiled(
+                hinttext: hinttext,
+                readOnly: true,
+                label: 'StartData',
+                controller: dateTimeController,
+                prefixIcon: Appicon.IconeCaleander,
+                ontap: () => _pickDateTime(context),
               ),
-              Card(
-                color: Colors.white,
-                child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: dateTimeController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        labelText: "Select Date & Time",
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(
-                            right: 10,
-                          ),
-                          child: SvgPicture.asset(
-                            Appicon.IconeCaleander,
-                          ),
-                        ),
-                      ),
-                      onTap: () => _pickDateTime(context),
-                    )),
+              DefultTextFiled(
+                readOnly: true,
+                label: 'StartData',
+                controller: dateTimeController,
+                prefixIcon: Appicon.IconeCaleander,
+                ontap: () => _pickDateTime(context),
               ),
               Center(
                 child: ElevatedButton(
@@ -217,7 +131,9 @@ class _ScreenEditTaskState extends State<ScreenEditTask> {
                     side: BorderSide(
                         color: Colors.green, width: 2), // Border color & width
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    print('fhkjfhufh');
+                  },
                   child: Text(
                     'Update',
                     style: TextStyle(color: Colors.green),
